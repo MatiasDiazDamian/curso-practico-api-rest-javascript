@@ -14,9 +14,10 @@ async function getTrendingMoviesPreview() {
     const { data } = await api('trending/movie/day'); //Traemos la URL de api y le agregamos nuestros endpoints para hacer las peticiones
     const movies = data.results; //Creamos una variable para ver los resultados de data
     //const data = await res.json();
+    
+    trendingMoviesPreviewList.innerHTML = ""; //Llamamos una variable (declarada en el archivo nodes.js) que trae un elemento desde HTML y limpiamos su contenido a 0 antes del .forEach()
 
     movies.forEach(movie => { //Hacemos una interaccion por cada una de las peliculas.
-        const trendingMoviesPreviewList = document.querySelector('#trendingPreview .trendingPreview-movieList'); //Traemos un elemento de HTML
         
         const movieContainer = document.createElement('div'); //Creamos un div
         movieContainer.classList.add('movie-container');//Creamos una clase
@@ -36,9 +37,10 @@ async function getCategoriesPreview() {
     const { data } = await api('genre/movie/list');  //Traemos la URL de api y le agregamos
     const categories = data.genres; //creamos un variable para guardar los distintos generos
     //const data = await res.json();
+    
+    categoriesPreviewList.innerHTML = ""; //Llamamos una variable (declarada en el archivo nodes.js) que trae un elemento desde HTML y limpiamos su contenido a 0 antes del .forEach()
 
     categories.forEach(category => { //hacemos una interaccion por cada categoria con forEach
-        const categoriesPreviewList = document.querySelector('#categoriesPreview .categoriesPreview-list');
         
         const categoryContainer = document.createElement('div');
         categoryContainer.classList.add('category-container');
