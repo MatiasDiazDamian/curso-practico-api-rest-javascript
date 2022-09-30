@@ -29,6 +29,9 @@ function navigator() {
     }  else {
         homePage();         
     }
+
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
 }
 
 function homePage() {
@@ -69,7 +72,13 @@ function categoriesPage() {
     genericSection.classList.remove('inactive');
     movieDetailSection.classList.add('inactive');
     
+
+    //['#category=', 'id-name'] Esto es lo que nos daria el split de abajo
+    const [ , categoryData] = location.hash.split('='); //Me separa la url cada que encuentra un '=' y como necesito el segundo que aparezca en el array al comienzo de la variable ignoro el primer valor
+    const [categoryId, categoryName] = categoryData.split('-'); //Me separa lo que nos dio el array anterior cada que encuentra un '-'
     
+    headerCategoryTitle.innerHTML = categoryName; //Le concatenamos el category name al titulo cada que llamamos una nueva category
+    getMoviesByCategory(categoryId); //llamamos la funcion y le pasamos el numero de id que traemos desde 'category
 
 }
 function movieDetailsPage() {
