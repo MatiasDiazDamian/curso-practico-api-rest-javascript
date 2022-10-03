@@ -18,6 +18,9 @@ function createMovies(movies, container) {
         
         const movieContainer = document.createElement('div'); //Creamos un div
         movieContainer.classList.add('movie-container');//Creamos una clase
+        movieContainer.addEventListener('click', () => {
+            location.hash = '#movie=' + movie.id;
+        });
 
         const movieImg = document.createElement('img'); //Creamos una img
         movieImg.classList.add('movie-img'); //creamos una clase a la img
@@ -84,4 +87,57 @@ async function getMoviesByCategory(id) {
     
     createMovies(movies, genericSection);
       
+}
+
+async function getMoviesBySearch(query) {
+    const { data } = await api('search/movie', {
+        params: {
+           query,
+        },
+    }); //Traemos la URL de api y le agregamos endpoints para hacer las peticiones
+    const movies = data.results; //Creamos una variable para ver los resultados de data
+    //const data = await res.json();
+    
+    createMovies(movies, genericSection);
+      
+}
+
+async function getTrendingMovies() {
+    const { data } = await api('trending/movie/day'); //Traemos la URL de api y le agregamos nuestros endpoints para hacer las peticiones
+    const movies = data.results; //Creamos una variable para ver los resultados de data
+    //const data = await res.json();
+    
+    createMovies(movies,genericSection);
+}
+
+async function getMovieById(id) {
+    const { data: movie } = await api('movie/' + id); //Traemos la URL de api y le agregamos nuestros endpoints para hacer las peticiones
+  
+    const movieImgUrl = 'https://image.tmdb.org/t/p/w500' + movie.poster_path;
+    headerSection.style.background = `
+    linear-gradient(
+        180deg,
+         rgba(0, 0, 0, 0.35) 19.27%, 
+         rgba(0, 0, 0, 0) 29.17%
+     ),
+    url(${movieImgUrl})`
+    ;
+    
+    
+    movieDetailTitle.textContent = movie.title;
+    movieDetailDescription.textContent = movie.overview;
+    movieDetailScore.textContent = movie.vote_average;
+    
+   createCategories(movie.genres, movieDetailCategoriesList);
+
+
+   getRelatedMovieId(id);
+}
+
+async function getRelatedMovieId(id) {
+  const { data} = await api(`movie/${id}/similar`);
+  const relatedMovies = data.results;
+
+  createMovies(relatedMovies, relatedMoviesContainer);
+  relatedMoviesContainer.scrollTo(0,0);
 }
